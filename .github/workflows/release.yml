@@ -1,9 +1,15 @@
 name: Release
 
-# Pushing a tag such as v1.0 publishes a GitHub release with the playable single-file game attached.
+# Publishes a GitHub release with the playable single-file game attached. Run it from the Actions tab
+# with a version such as v1.1 (it creates the tag on the current main), or push a tag such as v1.1.
 on:
   push:
     tags: ['v*']
+  workflow_dispatch:
+    inputs:
+      tag:
+        description: Version to release, such as v1.1
+        required: true
 
 permissions:
   contents: write
@@ -20,8 +26,10 @@ jobs:
       - name: Create the release
         env:
           GH_TOKEN: ${{ github.token }}
+          TAG: ${{ inputs.tag || github.ref_name }}
         run: |
           cp index.html magic-friends.html
-          gh release create "$GITHUB_REF_NAME" magic-friends.html \
-            --title "Magic Friends, Up We Go! $GITHUB_REF_NAME" \
+          gh release create "$TAG" magic-friends.html \
+            --target "$GITHUB_SHA" \
+            --title "Magic Friends, Up We Go! $TAG" \
             --notes-file RELEASE_NOTES.md

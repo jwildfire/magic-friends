@@ -70,7 +70,7 @@ The source is split into pieces in `src/`, and `./build.sh` joins them back into
 | `src/island.js` | Fairy Island levels, the witch, and the story scenes |
 | `src/tail.js` | Menus, input, screen sizing and the game loop |
 
-After you edit anything in `src/`, run `./build.sh` and commit both the source and `index.html`. Every push to `main` republishes the game to GitHub Pages. Pushing a tag like `v1.1` creates a release.
+After you edit anything in `src/`, run `./build.sh` and commit both the source and `index.html`. Every push to `main` republishes the game to GitHub Pages. To make a new release, update `RELEASE_NOTES.md`, then run the **Release** workflow from the Actions tab with a version like `v1.1` (pushing a tag like `v1.1` works too).
 
 Add `?test` to the URL to get a `window.__game` object for testing in the browser console.
 
