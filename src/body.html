@@ -1,0 +1,110 @@
+
+<div id="stage">
+  <div id="fit">
+    <div id="screen">
+      <canvas id="game" width="320" height="180" aria-label="Game screen. Tap a ledge or cloud to jump onto it."></canvas>
+
+      <div id="title" class="layer">
+        <h1 id="name">Magic Friends, Up We Go!</h1>
+        <p class="sub">Swim up the sea, ride a unicorn into the clouds, and climb all the way to the sunrise.</p>
+        <div class="btns">
+          <button id="play" class="big notch" type="button">Play</button>
+          <button id="pick" class="big alt notch" type="button">Pick a level</button>
+        </div>
+        <div class="seg diffseg" role="group" aria-label="How tricky">
+          <button type="button" data-diff="0" aria-pressed="true">Easy</button>
+          <button type="button" data-diff="1" aria-pressed="false">Normal</button>
+          <button type="button" data-diff="2" aria-pressed="false" class="hardbtn" hidden>Harder</button>
+        </div>
+        <p class="tapnote notch">Tap where you want to jump!</p>
+        <p class="diffnote" data-diffnote></p>
+        <p class="keys">Or use arrow keys and Space</p>
+      </div>
+
+      <div id="levels" class="layer" hidden>
+        <h2>Pick a level</h2>
+        <p class="keys">Gold is next · Green is done · 60 levels to the sunrise</p>
+        <div class="lvgrid" id="lvgrid"></div>
+        <div class="lvbar">
+          <div class="seg diffseg" role="group" aria-label="How tricky">
+            <button type="button" data-diff="0" aria-pressed="true">Easy</button>
+            <button type="button" data-diff="1" aria-pressed="false">Normal</button>
+            <button type="button" data-diff="2" aria-pressed="false" class="hardbtn" hidden>Harder</button>
+          </div>
+          <button id="lvBack" class="big ghost notch" type="button">Back</button>
+        </div>
+      </div>
+
+      <div id="toast" hidden></div>
+      <div id="caption" hidden></div>
+      <div id="skip" hidden>Tap to skip</div>
+
+      <div id="done" class="layer" hidden>
+        <div class="plate notch">
+          <h2 id="doneTitle">Level complete!</h2>
+          <p class="sub" id="doneSub"></p>
+        </div>
+        <div class="btns">
+          <button id="doneNext" class="big notch" type="button">Next level</button>
+          <button id="doneMap" class="big ghost notch" type="button">Pick a level</button>
+        </div>
+      </div>
+
+      <div id="wdone" class="layer lowbar" hidden>
+        <div class="barplate notch">
+          <h2 id="wdoneTitle">World complete!</h2>
+          <p class="sub" id="wdoneSub"></p>
+        </div>
+        <div class="btns">
+          <button id="wdNext" class="big notch" type="button">Next world</button>
+          <button id="wdMap" class="big ghost notch" type="button">Pick a level</button>
+        </div>
+      </div>
+
+      <div id="win" class="layer lowbar" hidden>
+        <div class="barplate notch">
+          <h2 id="winTitle">You won the whole entire game!</h2>
+          <p class="sub" id="winSub"></p>
+          <p class="crown" id="winCrown" hidden>Sparkle crown unlocked</p>
+        </div>
+        <div class="btns">
+          <button id="winHard" class="big notch" type="button">Play the harder level</button>
+          <button id="winAgain" class="big ghost notch" type="button">Play again</button>
+        </div>
+      </div>
+
+      <div id="corner">
+        <button id="btnPad" class="mini notch" type="button" aria-pressed="false" aria-label="Show arrow buttons" hidden>
+          <svg viewBox="0 0 10 10"><path d="M1 3h8v4H1zM2 4.5h1v-1h1v1h1v1H4v1H3v-1H2zM6.5 4h1v1h-1zM7.5 5h1v1h-1z"/></svg>
+        </button>
+        <button id="btnSound" class="mini notch" type="button" aria-pressed="true" aria-label="Sound">
+          <svg class="on" viewBox="0 0 10 10"><path d="M1 3.5h2l2.5-2v7L3 6.5H1zM6.5 3.5h1v3h-1zM8 2h1v6H8z"/></svg>
+          <svg class="off" viewBox="0 0 10 10"><path d="M1 3.5h2l2.5-2v7L3 6.5H1zM6.5 3h1v1h-1zM8.5 3h1v1h-1zM7.5 4h1v2h-1zM6.5 6h1v1h-1zM8.5 6h1v1h-1z"/></svg>
+        </button>
+        <button id="btnHome" class="mini notch" type="button" aria-label="Back to the start screen" hidden>
+          <svg viewBox="0 0 10 10"><path d="M5 1 1 4.5h1V9h2.5V6.5h1V9H8V4.5h1z"/></svg>
+        </button>
+      </div>
+    </div>
+  </div>
+  <div id="pad">
+    <div class="lr">
+      <button id="bL" class="pb" type="button" tabindex="-1" aria-label="Move left"><svg viewBox="0 0 10 10"><path d="M2 4h1V3h1V2h1v6H4V7H3V6H2z"/></svg></button>
+      <button id="bR" class="pb" type="button" tabindex="-1" aria-label="Move right"><svg viewBox="0 0 10 10"><path d="M8 4H7V3H6V2H5v6h1V7h1V6h1z"/></svg></button>
+    </div>
+    <button id="bJ" class="pb" type="button" tabindex="-1" aria-label="Jump"><svg viewBox="0 0 10 10"><path d="M4 9h2V5h2V4H7V3H6V2H4v1H3v1H2v1h2z"/></svg></button>
+  </div>
+</div>
+
+<script>
+(function(){
+'use strict';
+var OUT='#2b1b45', W=320;
+var TEST=/[?&]test\b/.test(location.search);
+
+/* Our co-designer's picks from the design page */
+var picks={name:'Magic Friends, Up We Go!',tail:'purple',hair:'pink',mane:'pink',wings:'no',checkpoint:'chest',collect:'gems',friend:'fairy',nextLevel:'candy'};
+var TAILS={teal:{t:'#2ec4b6',T:'#178a87',f:'#8ff3e4',F:'#3fd8c8'},purple:{t:'#9a6bff',T:'#6a3fd1',f:'#d4bfff',F:'#a983ff'},pink:{t:'#ff6fae',T:'#cf3f80',f:'#ffc0dc',F:'#ff8cc0'},gold:{t:'#ffc23c',T:'#d18f12',f:'#fff0a8',F:'#ffd56b'},blue:{t:'#3f8cff',T:'#2457c9',f:'#b3d6ff',F:'#6aa8ff'}};
+var HAIRS={pink:{h:'#ff8fc8',H:'#d95c9d',l:'#ffc4e2'},purple:{h:'#a77bff',H:'#7650d6',l:'#d2bcff'},red:{h:'#ff5d4f',H:'#c43a30',l:'#ff9d8f'},blonde:{h:'#ffd66b',H:'#dca73a',l:'#fff0b0'},brown:{h:'#a0623e',H:'#6f3f26',l:'#cf9468'},blue:{h:'#4fb6ff',H:'#2a7fd1',l:'#a9dcff'}};
+var MANES={rainbow:{m:'#ff7fb0',n:'#ffd75e',k:'#6fd0ff'},pink:{m:'#ff8fc8',n:'#ffc4e2',k:'#e0609f'},purple:{m:'#a77bff',n:'#d2bcff',k:'#7a4fd6'},blue:{m:'#4fb6ff',n:'#a9dcff',k:'#2a7fd1'},gold:{m:'#ffc93c',n:'#fff0a8',k:'#e0a21a'}};
+

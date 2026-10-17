@@ -1,0 +1,26 @@
+name: Publish to GitHub Pages
+
+# GitHub Pages serves the gh-pages branch. Every push to main checks the build and copies main to gh-pages.
+on:
+  push:
+    branches: [main]
+  workflow_dispatch:
+
+permissions:
+  contents: write
+
+concurrency:
+  group: pages
+  cancel-in-progress: true
+
+jobs:
+  publish:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - name: Check index.html matches src/
+        run: |
+          ./build.sh
+          git diff --exit-code index.html
+      - name: Copy main to gh-pages
+        run: git push --force origin HEAD:refs/heads/gh-pages
